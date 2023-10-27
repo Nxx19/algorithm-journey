@@ -5,7 +5,7 @@ package class067;
 // 对于每个单元格，你可以往上，下，左，右四个方向移动
 // 你 不能 在 对角线 方向上移动或移动到 边界外（即不允许环绕）
 // 测试链接 : https://leetcode.cn/problems/longest-increasing-path-in-a-matrix/
-public class Code03_LongestIncreasingPath {
+public class Code06_LongestIncreasingPath {
 
 	public static int longestIncreasingPath1(int[][] grid) {
 		int ans = 0;
@@ -17,6 +17,7 @@ public class Code03_LongestIncreasingPath {
 		return ans;
 	}
 
+	// 从(i,j)出发，能走出来多长的递增路径，返回最长长度
 	public static int f1(int[][] grid, int i, int j) {
 		int next = 0;
 		if (i > 0 && grid[i][j] < grid[i - 1][j]) {
