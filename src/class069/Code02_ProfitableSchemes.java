@@ -12,24 +12,30 @@ public class Code02_ProfitableSchemes {
 
 	// n : 员工的额度，不能超
 	// p : 利润的额度，不能少
-	// group[i] : 需要几个人
-	// profit[i] : 产生的利润
+	// group[i] : i号项目需要几个人
+	// profit[i] : i号项目产生的利润
+	// 返回能做到员工不能超过n，利润不能少于p的计划有多少个
 	public static int profitableSchemes1(int n, int minProfit, int[] group, int[] profit) {
 		return f1(group, profit, 0, n, minProfit);
 	}
 
-	// i : 来到i号项目
-	// r : 员工还有r人
-	// s : 利润还有s才能达成目标
-	// 返回 : 有多少种方案
+	// i : 来到i号工作
+	// r : 员工额度还有r人，如果r<=0说明已经没法再选择工作了
+	// s : 利润还有s才能达标，如果s<=0说明之前的选择已经让利润达标了
+	// 返回 : i.... r、s，有多少种方案
 	public static int f1(int[] g, int[] p, int i, int r, int s) {
 		if (r <= 0) {
+			// 人已经耗尽了，之前可能选了一些工作
 			return s <= 0 ? 1 : 0;
 		}
+		// r > 0
 		if (i == g.length) {
+			// 工作耗尽了，之前可能选了一些工作
 			return s <= 0 ? 1 : 0;
 		}
+		// 不要当前工作
 		int p1 = f1(g, p, i + 1, r, s);
+		// 要做当前工作
 		int p2 = 0;
 		if (g[i] <= r) {
 			p2 = f1(g, p, i + 1, r - g[i], s - p[i]);
@@ -73,6 +79,7 @@ public class Code02_ProfitableSchemes {
 	}
 
 	public static int profitableSchemes3(int n, int minProfit, int[] group, int[] profit) {
+		// i = 没有工作的时候，i == g.length
 		int[][] dp = new int[n + 1][minProfit + 1];
 		for (int r = 0; r <= n; r++) {
 			dp[r][0] = 1;
