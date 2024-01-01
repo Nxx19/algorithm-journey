@@ -42,12 +42,9 @@ public class Code01_BoundedKnapsack {
 			in.nextToken();
 			t = (int) in.nval;
 			for (int i = 1; i <= n; i++) {
-				in.nextToken();
-				v[i] = (int) in.nval;
-				in.nextToken();
-				w[i] = (int) in.nval;
-				in.nextToken();
-				c[i] = (int) in.nval;
+				in.nextToken(); v[i] = (int) in.nval;
+				in.nextToken(); w[i] = (int) in.nval;
+				in.nextToken(); c[i] = (int) in.nval;
 			}
 			out.println(compute2());
 		}
@@ -57,7 +54,9 @@ public class Code01_BoundedKnapsack {
 	}
 
 	// 严格位置依赖的动态规划
+	// 时间复杂度O(n * t * 每种商品的平均个数)
 	public static int compute1() {
+		// dp[0][....] = 0，表示没有货物的情况下，背包容量不管是多少，最大价值都是0
 		int[][] dp = new int[n + 1][t + 1];
 		for (int i = 1; i <= n; i++) {
 			for (int j = 0; j <= t; j++) {
@@ -73,6 +72,7 @@ public class Code01_BoundedKnapsack {
 	// 空间压缩
 	// 部分测试用例超时
 	// 因为没有优化枚举
+	// 时间复杂度O(n * t * 每种商品的平均个数)
 	public static int compute2() {
 		for (int i = 1; i <= n; i++) {
 			for (int j = t; j >= 0; j--) {
