@@ -1,12 +1,11 @@
 package class093;
 
 // 过河问题
-// 有一个大晴天，Oliver与同学们一共N人出游
-// 他们走到一条河的东岸边，想要过河到西岸
-// 而东岸边有一条小船，船太小了，一次只能乘坐两人
-// 每个人都有一个渡河时间T，船划到对岸的时间等于船上渡河时间较长的人所用时间
-// 现在已知N个人的渡河时间T，Oliver 想要你告诉他，他们最少要花费多少时间，才能使所有人都过河
-// 注意，只有船在东岸（西岸）的人才能坐上船划到对岸
+// 一共n人出游，他们走到一条河的西岸，想要过河到东岸
+// 每个人都有一个渡河时间ti，西岸有一条船，一次最多乘坐两人
+// 如果船上有一个人，划到对岸的时间，等于这个人的渡河时间
+// 如果船上有两个人，划到对岸的时间，等于两个人的渡河时间的最大值
+// 返回最少要花费多少时间，才能使所有人都过河
 // 测试链接 : https://www.luogu.com.cn/problem/P1809
 // 请同学们务必参考如下代码中关于输入、输出的处理
 // 这是输入输出处理效率很高的写法
@@ -20,11 +19,11 @@ import java.io.PrintWriter;
 import java.io.StreamTokenizer;
 import java.util.Arrays;
 
-public class Code03_CrossRiver {
+public class Code04_CrossRiver {
 
 	public static int MAXN = 100001;
 
-	public static int[] arr = new int[MAXN];
+	public static int[] nums = new int[MAXN];
 
 	public static int[] dp = new int[MAXN];
 
@@ -38,7 +37,7 @@ public class Code03_CrossRiver {
 			n = (int) in.nval;
 			for (int i = 0; i < n; i++) {
 				in.nextToken();
-				arr[i] = (int) in.nval;
+				nums[i] = (int) in.nval;
 			}
 			out.println(minCost());
 		}
@@ -48,18 +47,18 @@ public class Code03_CrossRiver {
 	}
 
 	public static int minCost() {
-		Arrays.sort(arr, 0, n);
+		Arrays.sort(nums, 0, n);
 		if (n >= 1) {
-			dp[0] = arr[0];
+			dp[0] = nums[0];
 		}
 		if (n >= 2) {
-			dp[1] = arr[1];
+			dp[1] = nums[1];
 		}
 		if (n >= 3) {
-			dp[2] = arr[0] + arr[1] + arr[2];
+			dp[2] = nums[0] + nums[1] + nums[2];
 		}
 		for (int i = 3; i < n; i++) {
-			dp[i] = Math.min(dp[i - 2] + arr[1] + arr[0] + arr[i] + arr[1], dp[i - 1] + arr[i] + arr[0]);
+			dp[i] = Math.min(dp[i - 1] + nums[i] + nums[0], dp[i - 2] + nums[1] + nums[1] + nums[i] + nums[0]);
 		}
 		return dp[n - 1];
 	}
