@@ -1,17 +1,14 @@
 package class096;
 
-// E&D游戏
-// 桌子上有2n堆石子，编号为1、2、3...2n
-// 其中1、2为一组；3、4为一组；5、6为一组...2n-1、2n为一组
-// 每组可以进行分割操作：
+// 计算两堆石子的SG值
+// 桌上有两堆石子，石头数量分别为a、b
 // 任取一堆石子，将其移走，然后分割同一组的另一堆石子
 // 从中取出若干个石子放在被移走的位置，组成新的一堆
 // 操作完成后，组内每堆的石子数必须保证大于0
 // 显然，被分割的一堆的石子数至少要为2
-// 两个人轮流进行分割操作，如果轮到某人进行操作时，所有堆的石子数均为1，判此人输掉比赛
-// 返回先手能不能获胜
-// 测试链接 : https://www.luogu.com.cn/problem/P2148
-// 本文件仅为打表找规律的代码
+// 两个人轮流进行分割操作，如果轮到某人进行操作时，两堆石子数均为1，判此人输掉比赛
+// 计算sg[a][b]的值并找到简洁规律
+// 本文件仅为题目5打表找规律的代码
 public class Code05_EDGame1 {
 
 	public static int MAXN = 1001;
@@ -66,7 +63,10 @@ public class Code05_EDGame1 {
 		System.out.println();
 		for (int a = 1; a <= 9; a++) {
 			System.out.print(a + "   ");
-			for (int b = 1; b <= 9; b++) {
+			for (int b = 1; b < a; b++) {
+				System.out.print("X ");
+			}
+			for (int b = a; b <= 9; b++) {
 				int sg = sg(a, b);
 				System.out.print(sg + " ");
 			}
@@ -85,7 +85,10 @@ public class Code05_EDGame1 {
 		System.out.println();
 		for (int a = 1; a <= 9; a++) {
 			System.out.print((a - 1) + "   ");
-			for (int b = 1; b <= 9; b++) {
+			for (int b = 1; b < a; b++) {
+				System.out.print("X ");
+			}
+			for (int b = a; b <= 9; b++) {
 				int sg = sg(a, b);
 				System.out.print(sg + " ");
 			}
@@ -107,13 +110,14 @@ public class Code05_EDGame1 {
 		System.out.println("测试结束");
 	}
 
-	public static int lowZero(int num) {
+	// 返回status最低位的0在第几位
+	public static int lowZero(int status) {
 		int cnt = 0;
-		while (num > 0) {
-			if ((num & 1) == 0) {
+		while (status > 0) {
+			if ((status & 1) == 0) {
 				break;
 			}
-			num >>= 1;
+			status >>= 1;
 			cnt++;
 		}
 		return cnt;

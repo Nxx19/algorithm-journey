@@ -1,6 +1,6 @@
 package class095;
 
-// 威佐夫博弈
+// 威佐夫博弈(Wythoff Game)
 // 有两堆石子，数量任意，可以不同，游戏开始由两个人轮流取石子
 // 游戏规定，每次有两种不同的取法
 // 1) 在任意的一堆中取走任意多的石子
@@ -21,6 +21,7 @@ import java.io.StreamTokenizer;
 
 public class Code06_WythoffGame {
 
+	// 黄金分割比例
 	public static double split = (Math.sqrt(5.0) + 1.0) / 2.0;
 
 	public static int a, b;
@@ -43,11 +44,14 @@ public class Code06_WythoffGame {
 	public static int compute() {
 		int min = Math.min(a, b);
 		int max = Math.max(a, b);
-		int diff = max - min;
-		if (min == (int) (split * diff)) {
-			return 0;
-		} else {
+		// 威佐夫博弈
+		// 小 != (大 - 小) * 黄金分割比例，先手赢
+		// 小 == (大 - 小) * 黄金分割比例，后手赢
+		// 要向下取整
+		if (min != (int) (split * (max - min))) {
 			return 1;
+		} else {
+			return 0;
 		}
 	}
 
