@@ -18,36 +18,25 @@ public class Code06_CountVowelsPermutation {
 	public static int MOD = 1000000007;
 
 	public static int countVowelPermutation(int n) {
-		int[][] base = { { 0, 1, 0, 0, 0 },
-				         { 1, 0, 1, 0, 0 },
-				         { 1, 1, 0, 1, 1 },
-				         { 0, 0, 1, 0, 1 },
-				         { 1, 0, 0, 0, 0 } };
-		int[][] m = power(base, n - 1);
-		long ans = 0;
-		for (int i = 0; i < 5; i++) {
-			for (int j = 0; j < 5; j++) {
-				ans = (ans + m[i][j]) % MOD;
-			}
+		// 长度为1的时候，以a、e、i、o、u结尾的合法数量
+		int[][] start = { { 1, 1, 1, 1, 1 } };
+		int[][] base = {
+				{ 0, 1, 0, 0, 0 },
+				{ 1, 0, 1, 0, 0 },
+				{ 1, 1, 0, 1, 1 },
+				{ 0, 0, 1, 0, 1 },
+				{ 1, 0, 0, 0, 0 }
+				};
+		int[][] ans = multiply(start, power(base, n - 1));
+		int ret = 0;
+		for (int a : ans[0]) {
+			ret = (ret + a) % MOD;
 		}
-		return (int) ans;
+		return ret;
 	}
 
-	public static int[][] power(int[][] m, int p) {
-		int n = m.length;
-		int[][] ans = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			ans[i][i] = 1;
-		}
-		for (; p != 0; p >>= 1) {
-			if ((p & 1) != 0) {
-				ans = multiply(ans, m);
-			}
-			m = multiply(m, m);
-		}
-		return ans;
-	}
-
+	// 矩阵相乘 + 乘法取模
+	// a的列数一定要等于b的行数
 	public static int[][] multiply(int[][] a, int[][] b) {
 		int n = a.length;
 		int m = b[0].length;
@@ -59,6 +48,22 @@ public class Code06_CountVowelsPermutation {
 					ans[i][j] = (int) (((long) a[i][c] * b[c][j] + ans[i][j]) % MOD);
 				}
 			}
+		}
+		return ans;
+	}
+
+	// 矩阵快速幂
+	public static int[][] power(int[][] m, int p) {
+		int n = m.length;
+		int[][] ans = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			ans[i][i] = 1;
+		}
+		for (; p != 0; p >>= 1) {
+			if ((p & 1) != 0) {
+				ans = multiply(ans, m);
+			}
+			m = multiply(m, m);
 		}
 		return ans;
 	}

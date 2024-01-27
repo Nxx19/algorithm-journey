@@ -21,14 +21,16 @@ public class Code05_DominoTromino {
 
 	// 暴力方法
 	// 为了找规律
-	public static int f(int n, int r) {
+	// 如果h==0，返回2*n的区域铺满的方法数
+	// 如果h==1，返回1 + 2*n的区域铺满的方法数
+	public static int f(int n, int h) {
 		if (n == 0) {
-			return r == 0 ? 1 : 0;
+			return h == 0 ? 1 : 0;
 		}
 		if (n == 1) {
 			return 1;
 		}
-		if (r == 1) {
+		if (h == 1) {
 			return f(n - 1, 0) + f(n - 1, 1);
 		} else {
 			return f(n - 1, 0) + f(n - 2, 0) + 2 * f(n - 2, 1);
@@ -54,29 +56,18 @@ public class Code05_DominoTromino {
 		if (n == 2) {
 			return 5;
 		}
-		int[][] base = { { 2, 1, 0 }, { 0, 0, 1 }, { 1, 0, 0 } };
-		int[][] m = power(base, n - 2);
-		long ans = 5L * m[0][0] % MOD;
-		ans = (ans + 2L * m[1][0]) % MOD;
-		ans = (ans + m[2][0]) % MOD;
-		return (int) ans;
+		int[][] start = { { 5, 2, 1 } };
+		int[][] base = {
+				{ 2, 1, 0 },
+				{ 0, 0, 1 },
+				{ 1, 0, 0 }
+				};
+		int[][] ans = multiply(start, power(base, n - 2));
+		return ans[0][0];
 	}
 
-	public static int[][] power(int[][] m, int p) {
-		int n = m.length;
-		int[][] ans = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			ans[i][i] = 1;
-		}
-		for (; p != 0; p >>= 1) {
-			if ((p & 1) != 0) {
-				ans = multiply(ans, m);
-			}
-			m = multiply(m, m);
-		}
-		return ans;
-	}
-
+	// 矩阵相乘 + 乘法取模
+	// a的列数一定要等于b的行数
 	public static int[][] multiply(int[][] a, int[][] b) {
 		int n = a.length;
 		int m = b[0].length;
@@ -88,6 +79,22 @@ public class Code05_DominoTromino {
 					ans[i][j] = (int) (((long) a[i][c] * b[c][j] + ans[i][j]) % MOD);
 				}
 			}
+		}
+		return ans;
+	}
+
+	// 矩阵快速幂
+	public static int[][] power(int[][] m, int p) {
+		int n = m.length;
+		int[][] ans = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			ans[i][i] = 1;
+		}
+		for (; p != 0; p >>= 1) {
+			if ((p & 1) != 0) {
+				ans = multiply(ans, m);
+			}
+			m = multiply(m, m);
 		}
 		return ans;
 	}

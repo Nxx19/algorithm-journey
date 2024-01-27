@@ -6,7 +6,7 @@ package class098;
 // 所以矩阵快速幂看不出优势
 public class Code02_FibonacciNumber {
 
-	// 时间复杂度O(n)，普通解法
+	// 时间复杂度O(n)，普通解法，讲解066，题目1
 	public static int fib1(int n) {
 		if (n == 0) {
 			return 0;
@@ -31,26 +31,17 @@ public class Code02_FibonacciNumber {
 		if (n == 1) {
 			return 1;
 		}
-		int[][] base = { { 1, 1 }, { 1, 0 } };
-		int[][] m = power(base, n - 1);
-		return m[0][0];
+		int[][] start = { { 1, 0 } };
+		int[][] base = {
+				{ 1, 1 },
+				{ 1, 0 }
+				};
+		int[][] ans = multiply(start, power(base, n - 1));
+		return ans[0][0];
 	}
 
-	public static int[][] power(int[][] m, int p) {
-		int n = m.length;
-		int[][] ans = new int[n][n];
-		for (int i = 0; i < n; i++) {
-			ans[i][i] = 1;
-		}
-		for (; p != 0; p >>= 1) {
-			if ((p & 1) != 0) {
-				ans = multiply(ans, m);
-			}
-			m = multiply(m, m);
-		}
-		return ans;
-	}
-
+	// 矩阵相乘
+	// a的列数一定要等于b的行数
 	public static int[][] multiply(int[][] a, int[][] b) {
 		int n = a.length;
 		int m = b[0].length;
@@ -62,6 +53,22 @@ public class Code02_FibonacciNumber {
 					ans[i][j] += a[i][c] * b[c][j];
 				}
 			}
+		}
+		return ans;
+	}
+
+	// 矩阵快速幂
+	public static int[][] power(int[][] m, int p) {
+		int n = m.length;
+		int[][] ans = new int[n][n];
+		for (int i = 0; i < n; i++) {
+			ans[i][i] = 1;
+		}
+		for (; p != 0; p >>= 1) {
+			if ((p & 1) != 0) {
+				ans = multiply(ans, m);
+			}
+			m = multiply(m, m);
 		}
 		return ans;
 	}
